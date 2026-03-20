@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# devroast
+
+> paste your code. get roasted.
+
+DevRoast é uma aplicação para avaliar código com sarcasmo. Cole seu código, ative o modo roast e receba uma análise brutalmente honesta da qualidade do seu código.
+
+## Como funciona
+
+1. **Cole seu código** no editor com syntax highlighting
+2. **Ative o roast mode** para máxima sarcasmo (opcional)
+3. **Clique em roast_my_code** e receba sua nota
+4. **Veja seu ranking** no leaderboard de vergonha
+
+## Funcionalidades
+
+- **Editor de código** com syntax highlighting em tempo real
+- **Roast mode** — toggle para ativar o modo sarcástico
+- **Análise de código** com notas de 0 a 10
+- **Leaderboard** — ranking dos piores códigos da internet
+- **Score ring** — visualização circular do score
+- **Diff lines** — comparação de código antes/depois
+- **Badges de status** — critical, warning, good
+
+## Tecnologias
+
+- [Next.js](https://nextjs.org)
+- [React](https://react.dev)
+- [Tailwind CSS](https://tailwindcss.com)
+- [CodeMirror](https://codemirror.net)
+- [Shiki](https://shiki.matsu.io)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) no navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Comandos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev      # Desenvolvimento
+npm run build    # Build de produção
+npm run start    # Iniciar produção
+npm run lint     # Verificar código
+```
 
-## Learn More
+## Licença
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
