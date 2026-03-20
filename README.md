@@ -4,6 +4,8 @@
 
 DevRoast é uma aplicação para avaliar código com sarcasmo. Cole seu código, ative o modo roast e receba uma análise brutalmente honesta da qualidade do seu código.
 
+Projeto construído durante o [NLW](https://www.rocketseat.com.br/nlw) da [Rocketseat](https://www.rocketseat.com.br).
+
 ## Como funciona
 
 1. **Cole seu código** no editor com syntax highlighting
