@@ -23,6 +23,7 @@ export interface CodeEditorProps {
 	language?: string;
 	onCodeChange?: (code: string) => void;
 	onLanguageChange?: (lang: string) => void;
+	maxLength?: number;
 	showLanguageSelector?: boolean;
 	showLineNumbers?: boolean;
 	placeholder?: string;
@@ -37,6 +38,7 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
 			language: controlledLanguage,
 			onCodeChange,
 			onLanguageChange,
+			maxLength = 2000,
 			showLanguageSelector = true,
 			showLineNumbers = true,
 			placeholder = "paste your code here...",
@@ -104,16 +106,7 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
 			}
 		}, []);
 
-		// Handle code change
-		const handleChange = useCallback<ChangeEventHandler<HTMLTextAreaElement>>(
-			(e) => {
-				const newCode = e.target.value;
-				setCode(newCode);
-			},
-			[setCode],
-		);
-
-		// Handle paste — auto-detect language
+		// Handle paste — auto-detect language, truncate if over limit
 		const handlePaste = useCallback<ClipboardEventHandler<HTMLTextAreaElement>>(
 			(e) => {
 				if (controlledLanguage !== undefined) return;
@@ -130,6 +123,19 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
 				}
 			},
 			[language, detect, setLang, controlledLanguage],
+		);
+
+		// Handle code change with maxLength enforcement
+		const handleChange = useCallback<ChangeEventHandler<HTMLTextAreaElement>>(
+			(e) => {
+				const newCode = e.target.value;
+				if (newCode.length > maxLength) {
+					setCode(newCode.slice(0, maxLength));
+					return;
+				}
+				setCode(newCode);
+			},
+			[setCode, maxLength],
 		);
 
 		// Tab indent, auto-close brackets, enter with indent
@@ -230,6 +236,8 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
 		}, [isLangOpen]);
 
 		const lineCount = code ? code.split("\n").length : 0;
+		const charCount = code.length;
+		const isOverLimit = charCount > maxLength;
 		const currentLang = LANGUAGES[language];
 		const lineNumbers = useMemo(
 			() => Array.from({ length: lineCount }, (_, i) => i + 1),
@@ -368,6 +376,19 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
 						)}
 						style={{ tabSize: 2 }}
 					/>
+
+					{/* Character counter */}
+					{code && (
+						<div className="absolute bottom-2 right-3 font-mono text-[11px] pointer-events-none select-none">
+							<span
+								className={
+									isOverLimit ? "text-accent-red" : "text-text-tertiary"
+								}
+							>
+								{charCount.toLocaleString()} / {maxLength.toLocaleString()}
+							</span>
+						</div>
+					)}
 				</div>
 			</div>
 		);

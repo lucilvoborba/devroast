@@ -62,10 +62,7 @@ const CodeBlockBody = forwardRef<HTMLDivElement, CodeBlockBodyProps>(
 		return (
 			<div
 				ref={ref}
-				className={cn(
-					"flex bg-bg-input border border-border-primary overflow-x-auto",
-					className,
-				)}
+				className={cn("flex bg-bg-input overflow-x-auto", className)}
 				{...props}
 			/>
 		);

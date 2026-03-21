@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { CodeEditor } from "@/components/code-editor";
-import { RoastToggle } from "@/components/roast-toggle";
+import { CodeSubmitSection } from "@/components/code-submit-section";
 import {
 	Button,
 	TableRowCode,
@@ -47,16 +46,8 @@ export default function HomePage() {
 				</p>
 			</section>
 
-			{/* Code Editor */}
-			<section className="w-full max-w-5xl">
-				<CodeEditor />
-			</section>
-
-			{/* Actions Bar */}
-			<section className="w-full max-w-5xl flex items-center justify-between">
-				<RoastToggle />
-				<Button>$ roast_my_code</Button>
-			</section>
+			{/* Code Editor + Actions */}
+			<CodeSubmitSection />
 
 			{/* Footer Stats */}
 			<p className="font-mono text-xs text-text-tertiary">

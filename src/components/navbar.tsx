@@ -12,7 +12,7 @@ export function Navbar() {
 				</span>
 			</Link>
 			<Link
-				href="/"
+				href="/leaderboard"
 				className="font-mono text-sm text-text-secondary hover:text-text-primary transition-colors"
 			>
 				leaderboard
