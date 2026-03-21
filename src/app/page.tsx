@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CodeSubmitSection } from "@/components/code-submit-section";
+import { Stats } from "@/components/stats";
 import {
 	Button,
 	TableRowCode,
@@ -50,9 +51,7 @@ export default function HomePage() {
 			<CodeSubmitSection />
 
 			{/* Footer Stats */}
-			<p className="font-mono text-xs text-text-tertiary">
-				2,847 codes roasted · avg score: 4.2/10
-			</p>
+			<Stats />
 
 			{/* Spacer */}
 			<div className="h-16" />
