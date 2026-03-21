@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { faker } from "@faker-js/faker";
 import { db } from "./index";
 import {
