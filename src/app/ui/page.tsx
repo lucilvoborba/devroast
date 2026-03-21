@@ -1,4 +1,5 @@
 import { ArrowRight, Plus } from "lucide-react";
+import { CodeEditor } from "@/components/code-editor";
 import {
 	BadgeDot,
 	BadgeLabel,
@@ -136,6 +137,19 @@ export default function UIShowcasePage() {
 								</div>
 							</CardBody>
 						</CardRoot>
+					</div>
+				</section>
+
+				<section>
+					<h2 className="font-mono text-sm mb-6 text-text-primary">
+						<span className="text-accent-green">{"//"}</span> code_editor
+					</h2>
+					<div className="w-full max-w-3xl">
+						<CodeEditor
+							showLanguageSelector
+							showLineNumbers
+							placeholder="paste your code here..."
+						/>
 					</div>
 				</section>
 
