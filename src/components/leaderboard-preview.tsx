@@ -4,7 +4,7 @@ import { caller } from "@/trpc/server";
 
 export async function LeaderboardPreview() {
 	const [entries, { totalSubmissions, avgScore }] = await Promise.all([
-		caller.leaderboard.getLeaderboard(),
+		caller.leaderboard.getLeaderboard({ limit: 3 }),
 		caller.leaderboard.stats(),
 	]);
 
