@@ -2,9 +2,9 @@ import { LeaderboardEntry } from "@/components/leaderboard-entry";
 import { LeaderboardEntryContent } from "@/components/leaderboard-entry-content";
 import { caller } from "@/trpc/server";
 
-export async function LeaderboardPreview() {
+export async function LeaderboardPreview({ limit = 3 }: { limit?: number }) {
 	const [entries, { totalSubmissions, avgScore }] = await Promise.all([
-		caller.leaderboard.getLeaderboard({ limit: 3 }),
+		caller.leaderboard.getLeaderboard({ limit }),
 		caller.leaderboard.stats(),
 	]);
 
@@ -16,7 +16,7 @@ export async function LeaderboardPreview() {
 		);
 	}
 
-	const displayCount = Math.min(totalSubmissions, 3);
+	const displayCount = Math.min(totalSubmissions, limit);
 
 	return (
 		<>
