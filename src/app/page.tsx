@@ -1,35 +1,10 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { CodeSubmitSection } from "@/components/code-submit-section";
+import { LeaderboardPreview } from "@/components/leaderboard-preview";
+import { LeaderboardSkeleton } from "@/components/leaderboard-skeleton";
 import { Stats } from "@/components/stats";
-import {
-	Button,
-	TableRowCode,
-	TableRowLanguage,
-	TableRowRank,
-	TableRowRoot,
-	TableRowScore,
-} from "@/components/ui";
-
-const leaderboardData = [
-	{
-		rank: 1,
-		score: 2.1,
-		codePreview: "function calculateTotal(items) { var total = 0; ...",
-		language: "javascript",
-	},
-	{
-		rank: 2,
-		score: 3.4,
-		codePreview: "def process(data): [x*2 for x in data if x != None]...",
-		language: "python",
-	},
-	{
-		rank: 3,
-		score: 4.8,
-		codePreview: "const result = await fetch(url).then(r => r.json())...",
-		language: "javascript",
-	},
-];
+import { Button } from "@/components/ui";
 
 export default function HomePage() {
 	return (
@@ -62,9 +37,11 @@ export default function HomePage() {
 					<h2 className="font-mono text-sm text-text-primary">
 						<span className="text-accent-green">{"//"}</span> shame_leaderboard
 					</h2>
-					<Button variant="outline" size="sm">
-						{"$ view_all >>"}
-					</Button>
+					<Link href="/leaderboard">
+						<Button variant="outline" size="sm">
+							{"$ view_all >>"}
+						</Button>
+					</Link>
 				</div>
 
 				<p className="font-mono text-[13px] text-text-tertiary">
@@ -79,23 +56,16 @@ export default function HomePage() {
 					<span className="w-[100px]">lang</span>
 				</div>
 
-				{/* Table Rows */}
-				<div className="border border-border-primary rounded-b-lg overflow-hidden">
-					{leaderboardData.map((row) => (
-						<TableRowRoot key={row.rank}>
-							<TableRowRank>{`#${row.rank}`}</TableRowRank>
-							<TableRowScore score={row.score}>{row.score}</TableRowScore>
-							<TableRowCode>{row.codePreview}</TableRowCode>
-							<TableRowLanguage>{row.language}</TableRowLanguage>
-						</TableRowRoot>
-					))}
-				</div>
+				{/* Table Rows + Stats (queries em paralelo) */}
+				<Suspense fallback={<LeaderboardSkeleton />}>
+					<LeaderboardPreview />
+				</Suspense>
 
 				<Link
-					href="/"
+					href="/leaderboard"
 					className="text-center font-mono text-xs text-text-tertiary hover:text-text-secondary transition-colors"
 				>
-					showing top 3 of 2,847 · view full leaderboard {">>"}
+					view full leaderboard {">>"}
 				</Link>
 			</section>
 		</main>

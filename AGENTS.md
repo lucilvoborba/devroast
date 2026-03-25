@@ -9,22 +9,48 @@
 - Next.js 16 (App Router) + React 19
 - TypeScript 5
 - Tailwind CSS 4 (com `@theme` para variáveis)
+- tRPC 11 + TanStack Query 5
+- Drizzle ORM + PostgreSQL 16
 - Fonte: JetBrains Mono (via `next/font/google`)
 
 ## Estrutura
 
 ```
 src/
-├── app/
-│   ├── layout.tsx       # Navbar + body styling
-│   ├── page.tsx         # Homepage
-│   ├── globals.css      # @theme com variáveis de cor
-│   └── ui/              # Showcase de componentes
+├── app/                # Rotas e páginas (App Router)
+│   ├── layout.tsx      # Root layout com Navbar + TRPCReactProvider
+│   ├── page.tsx        # Homepage (code editor + leaderboard preview)
+│   ├── globals.css     # @theme com variáveis de cor
+│   ├── ui/             # Showcase de componentes (/ui)
+│   ├── leaderboard/    # Página de leaderboard (/leaderboard)
+│   ├── result/[id]/    # Resultado do roast (/result/:id)
+│   └── api/trpc/       # API route tRPC (/api/trpc)
 ├── components/
-│   ├── navbar.tsx       # Navbar (layout global)
-│   ├── code-editor.tsx  # CodeMirror (client)
-│   ├── roast-toggle.tsx # Toggle roast mode (client)
-│   └── ui/              # Componentes genéricos
+│   ├── navbar.tsx      # Navbar (server component)
+│   ├── code-editor.tsx # Editor com syntax highlight (client)
+│   ├── roast-toggle.tsx# Toggle roast mode (client)
+│   ├── stats.tsx       # Stats wrapper (server)
+│   ├── stats-client.tsx# Stats com NumberFlow (client)
+│   ├── code-submit-section.tsx # Seção de submit (client)
+│   └── ui/             # Componentes genéricos (ver AGENTS.md local)
+├── db/
+│   ├── index.ts        # Conexão Drizzle
+│   ├── schema.ts       # Tabelas PostgreSQL
+│   ├── queries.ts      # Funções de query
+│   └── seed.ts         # Seed de dados fake
+├── hooks/
+│   ├── use-shiki.ts    # Hook de syntax highlighting
+│   └── use-language-detect.ts # Hook de detecção de linguagem
+├── lib/
+│   └── languages.ts    # Configuração de linguagens suportadas
+└── trpc/
+    ├── init.ts         # Context e procedures base
+    ├── server.ts       # Server-side caller
+    ├── client.tsx      # Provider React
+    ├── query-client.ts # Configuração QueryClient
+    └── routers/
+        ├── _app.ts     # Root router
+        └── leaderboard.ts # Router de leaderboard
 ```
 
 ## Padrões
@@ -32,34 +58,15 @@ src/
 ### Convenções de Código
 
 - **Named exports** — nunca `export default`
-- **Componentes** — `forwardRef` + `displayName`
+- **Componentes UI** — `forwardRef` + `displayName` (ver `src/components/ui/AGENTS.md`)
 - **Props** — estender `HTMLAttributes` nativo, nomear `ComponentNameProps`
 - **Tailwind** — classes nativas (`bg-accent-green`), nunca CSS variables (`bg-[--var]`)
 - **Tailwind-variants** — passar `className` para `tv()`, não usar `cn()`
 - **cn()** — apenas para combinar classes fixas com `className` externo (sem `tv()`)
-- **Client components** — `"use client"` apenas quando necessário
+- **Client components** — `"use client"` apenas quando necessário (useState, useEffect, event handlers)
 - **Ícones** — Lucide React
-
-### Componentes UI (`src/components/ui/`)
-
-Padrão de composição com exports flat:
-
-| Componente | Sub-componentes |
-|---|---|
-| Badge | `BadgeRoot`, `BadgeDot`, `BadgeLabel` |
-| Button | `Button` (simples) |
-| Card | `CardRoot`, `CardHeader`, `CardBody`, `CardFooter` |
-| CodeBlock | `CodeBlockRoot`, `CodeBlockHeader`, `CodeBlockFileName`, `CodeBlockBody`, `CodeBlockLineNumbers`, `CodeBlockContent` |
-| DiffLine | `DiffLine` (simples) |
-| ScoreRing | `ScoreRing` (simples) |
-| TableRow | `TableRowRoot`, `TableRowRank`, `TableRowScore`, `TableRowCode`, `TableRowLanguage` |
-| Toggle | `Toggle` (simples) |
-
-### Dependências de Componentes
-
-- **Comportamento** → `@base-ui/react`
-- **Syntax highlighting** → `shiki` (server) / `@uiw/react-codemirror` (client)
-- **Estilização** → `tailwind-variants`
+- **Imports** — usar alias `@/` para imports de `src/`
+- **Formatação** — Biome com tabs, aspas duplas
 
 ### Cores (globals.css @theme)
 
@@ -73,7 +80,20 @@ border-primary: #1F1F1F  destructive: #FF5C33
 ### Comandos
 
 ```bash
-npm run dev      # Desenvolvimento
-npm run build    # Build
-npm run lint     # ESLint
+npm run dev          # Desenvolvimento
+npm run build        # Build
+npm run lint         # ESLint
+npm run db:generate  # Gerar migrations Drizzle
+npm run db:migrate   # Aplicar migrations
+npm run db:studio    # Drizzle Studio
+npm run db:seed      # Popular banco com dados fake
 ```
+
+### Documentação por Diretório
+
+- `src/components/ui/AGENTS.md` — Padrões de componentes UI
+- `src/app/AGENTS.md` — Padrões de rotas e páginas
+- `src/trpc/AGENTS.md` — Padrões de tRPC
+- `src/db/AGENTS.md` — Padrões de banco de dados
+- `src/hooks/AGENTS.md` — Padrões de hooks
+- `src/lib/AGENTS.md` — Padrões de utilitários
