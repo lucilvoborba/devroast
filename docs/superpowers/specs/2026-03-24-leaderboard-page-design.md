@@ -10,7 +10,15 @@ The `/leaderboard` page (`src/app/leaderboard/page.tsx`) currently uses hardcode
 
 ## Changes
 
-### 1. `src/components/leaderboard-preview.tsx`
+### 1. `src/trpc/routers/leaderboard.ts`
+
+Update `getLeaderboard` procedure to accept `limit` input:
+
+- Add `zod` import for input validation
+- Add `.input(z.object({ limit: z.number().min(1).max(100) }))` to procedure
+- Pass `input.limit` to `getLeaderboard(input.limit)` instead of hardcoded `3`
+
+### 2. `src/components/leaderboard-preview.tsx`
 
 Add optional `limit` prop (default `3`):
 
@@ -19,7 +27,7 @@ Add optional `limit` prop (default `3`):
 - Update `displayCount` to use `Math.min(totalSubmissions, limit)`
 - No other changes to rendering logic
 
-### 2. `src/app/leaderboard/page.tsx`
+### 3. `src/app/leaderboard/page.tsx`
 
 Rewrite from hardcoded data to dynamic server component:
 
@@ -32,7 +40,6 @@ Rewrite from hardcoded data to dynamic server component:
 
 ### No changes needed
 
-- `src/trpc/routers/leaderboard.ts` — `getLeaderboard` already accepts `limit` parameter
 - `src/components/leaderboard-entry.tsx` — reusable as-is
 - `src/components/leaderboard-entry-content.tsx` — reusable as-is
 - `src/components/leaderboard-skeleton.tsx` — reusable as-is (shows 3 skeleton rows, acceptable)
@@ -43,10 +50,30 @@ Rewrite from hardcoded data to dynamic server component:
 LeaderboardPage (server component)
   ├─ Stats (server → calls caller.leaderboard.stats())
   └─ LeaderboardPreview({ limit: 20 }) (server)
-       ├─ caller.leaderboard.getLeaderboard({ limit: 20 }) → DB query
+       ├─ caller.leaderboard.getLeaderboard({ limit: 20 }) → tRPC procedure → DB query
        ├─ caller.leaderboard.stats() → DB query
        └─ LeaderboardEntry × 20 (client, collapsible)
             └─ LeaderboardEntryContent (server, shiki highlighting)
+```
+
+## tRPC Router Detail
+
+The `getLeaderboard` procedure currently hardcodes `3`:
+
+```ts
+getLeaderboard: baseProcedure.query(async () => {
+    return getLeaderboard(3);  // hardcoded
+}),
+```
+
+Updated to accept input:
+
+```ts
+getLeaderboard: baseProcedure
+    .input(z.object({ limit: z.number().min(1).max(100) }))
+    .query(async ({ input }) => {
+        return getLeaderboard(input.limit);
+    }),
 ```
 
 ## Edge Cases
