@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import { Toggle } from "@/components/ui";
 
-export function RoastToggle() {
-	const [roastMode, setRoastMode] = useState(true);
+interface RoastToggleProps {
+	checked: boolean;
+	onCheckedChange: (checked: boolean) => void;
+}
 
+export function RoastToggle({ checked, onCheckedChange }: RoastToggleProps) {
 	return (
 		<div className="flex items-center gap-4">
 			<Toggle
-				checked={roastMode}
-				onCheckedChange={setRoastMode}
+				checked={checked}
+				onCheckedChange={onCheckedChange}
 				label="roast mode"
 			/>
 			<span className="font-mono text-xs text-text-tertiary">
