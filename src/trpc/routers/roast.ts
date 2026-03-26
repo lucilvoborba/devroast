@@ -58,15 +58,20 @@ export const roastRouter = createTRPCRouter({
 						position: i,
 					})),
 				);
-			} catch {
+			} catch (error) {
+				console.error("Roast analysis failed:", error);
+
 				await updateSubmissionAnalysis(submission.id, {
 					score: 0,
 					roastMessage: "",
 					status: "failed",
 				});
+
+				const message =
+					error instanceof Error ? error.message : "Failed to analyze code";
 				throw new TRPCError({
 					code: "INTERNAL_SERVER_ERROR",
-					message: "Failed to analyze code",
+					message,
 				});
 			}
 
